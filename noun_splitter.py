@@ -20,12 +20,16 @@ from joblib import Parallel, delayed, cpu_count
 
 class NounSplitter:
     def __init__(self, model_path='./model/np2.crfsuite',  n_jobs=1):
-        self.n_jobs = min(max(1, n_jobs), cpu_count())
         self.model_path = model_path
         if not os.path.isfile(model_path):
             raise ValueError(
                 "Can't find a model file at path '{}'. ".format(model_path)
             )
+        if n_jobs == -1:
+            self.n_jobs = n_jobs
+        else:
+            self.n_jobs = min(max(1, n_jobs), cpu_count())
+
 
     def load_tagger(self):
         tagger = pycrfsuite.Tagger()
@@ -56,7 +60,7 @@ class NounSplitter:
             sentences = list(sentences)
 
         length_sentences = len(sentences)
-        if (self.n_jobs > 1) and (length_sentences > 5e3):
+        if (self.n_jobs != 1) and (length_sentences >= 5e3):
             import operator
             import functools
             th = length_sentences // self.n_jobs + 1
