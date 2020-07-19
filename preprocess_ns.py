@@ -23,8 +23,8 @@ SPLIT_POS = ['NNG', 'NNP', 'XR', 'SS', 'SO']
 
 
 def processing_data(input_file_path, output_file_path):
-    reader = open(input_file_path, 'r')
-    writer = open(output_file_path, 'w')
+    reader = open(input_file_path, 'r', encoding='utf-8')
+    writer = open(output_file_path, 'w', encoding='utf-8')
     prev_char, prev_pos = '', ''
     sentence = []
     for i, line in enumerate(reader):
